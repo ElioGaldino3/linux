@@ -8,7 +8,7 @@ export ZSH="/home/eliogaldino/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="gnzh"
+ZSH_THEME="spaceship"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -68,7 +68,7 @@ ZSH_THEME="gnzh"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions flutter docker docker-compose npm yarn)
+plugins=(git asdf)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -97,6 +97,56 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-export PATH="$PATH:$HOME/.pub-cache/bin"
-export PATH="$PATH:$HOME/development/flutter/bin"
-export PATH="$PATH:/usr/lib/dart/bin"
+
+### Added by Zinit's installer
+if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
+    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
+    command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
+        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
+        print -P "%F{160}▓▒░ The clone has failed.%f%b"
+fi
+
+source "$HOME/.zinit/bin/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+zinit light-mode for \
+    zinit-zsh/z-a-as-monitor \
+    zinit-zsh/z-a-patch-dl \
+    zinit-zsh/z-a-bin-gem-node
+
+### End of Zinit's installer chunk
+
+zplugin light zdharma/fast-syntax-highlighting
+zplugin light zsh-users/zsh-autosuggestions
+zplugin light zsh-users/zsh-completions
+
+export PATH=/home/eliogaldino/Android/Sdk/platform-tools:$PATH
+export PATH=/home/eliogaldino/.pub-cache/bin:$PATH
+export ANDROID_HOME=$HOME/Android
+export ANDROID_SDK_ROOT=$HOME/Android/Sdk
+export PATH=$PATH:$HOME/bin:$ANDROID_SDK_ROOT/tools
+export PATH=${PATH}:${ANDROID_SDK_ROOT}/tools
+export PATH=${PATH}:${ANDROID_SDK_ROOT}/platform-tools
+export NO_PROXY=127.0.0.1
+
+SPACESHIP_PROMPT_ADD_NEWLINE=false 
+SPACESHIP_CHAT_SUFFIX=" "
+
+mkdircd ()
+{
+    mkdir -p -- "$1" &&
+      cd -P -- "$1"
+}
+
+alias elianaapp="cd ~/Projetos/eliana/eliana_app2"
+alias elianabackend="cd ~/Projetos/eliana/eliana_backend"
+alias elianafrontend="cd ~/Projetos/eliana/qr_code_generator"
+alias elianaweb="cd ~/Projetos/eliana/eliana_web"
+alias projetos="cd ~/Projetos"
+alias estudos="cd ~/Projetos/estudos"
+alias and="~/development/android-studio/bin/studio.sh &"
+alias pg="cd ~/development/postgres && docker-compose up -d"
