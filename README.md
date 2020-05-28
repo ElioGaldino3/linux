@@ -15,3 +15,7 @@
  * Desktop 3: Terminal e ferramentas de testes
  * Desktop 4: Apps de comunicação
  * Desktop 5: Cliente de email.
+
+## Tirar dispositivos removíveis da dock(ubuntu)
+
+gsettings set org.gnome.shell.extensions.dash-to-dock show-mounts false
