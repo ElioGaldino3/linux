@@ -3,30 +3,11 @@ say() {
     echo -e "\e[1m[ POST INSTALL ] - $@"
 }
 
-cd
-
-# ----------------------------- VARIÁVEIS ----------------------------- #
-URL_4K_VIDEO_DOWNLOADER="https://dl.4kdownload.com/app/4kvideodownloader_4.9.2-1_amd64.deb"
-URL_DOCKER1="https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/containerd.io_1.2.6-3_amd64.deb"
-URL_DOCKER2="https://download.docker.com/linux/ubuntu/dists/bionic/pool/stable/amd64/docker-ce-cli_19.03.8~3-0~ubuntu-bionic_amd64.deb"
-URL_DOCKER3="https://download.docker.com/linux/ubuntu/dists/bionic/pool/stable/amd64/docker-ce_19.03.8~3-0~ubuntu-bionic_amd64.deb"
-
 DIRETORIO_DOWNLOADS="$HOME/Downloads/programas"
 
 PROGRAMAS_PARA_INSTALAR=(
   git
-  fonts-hack-ttf
-  fonts-firacode
   zsh
-)
-
-PROGRAMAS_PARA_INSTALAR_FLATPAK=(
-  com.discordapp.Discord
-  com.spotify.Client
-  org.videolan.VLC
-  com.obsproject.Studio
-  org.qbittorrent.qBittorrent
-  com.getpostman.Postman
 )
 
 # ---------------------------------------------------------------------- #
@@ -40,7 +21,7 @@ sudo rm /var/cache/apt/archives/lock
 ## Atualizando o repositório ##
 say "Atualizando Repositório"
 sudo apt update -y
-
+sudo apt install curl -y
 # ---------------------------------------------------------------------- #
 
 # ----------------------------- EXECUÇÃO ----------------------------- #
@@ -48,16 +29,11 @@ sudo apt update -y
 
 ## Download e instalaçao de programas externos ##
 mkdir   "$DIRETORIO_DOWNLOADS"
-
-say "Baixando 4K Video Downloader"
-wget -c "$URL_4K_VIDEO_DOWNLOADER" -P "$DIRETORIO_DOWNLOADS"
-
-say "Baixando DOCKER"
-wget -c "$URL_DOCKER1"             -P "$DIRETORIO_DOWNLOADS"
-wget -c "$URL_DOCKER2"             -P "$DIRETORIO_DOWNLOADS"
-wget -c "$URL_DOCKER3"             -P "$DIRETORIO_DOWNLOADS"
-
-
+cd "$DIRETORIO_DOWNLOADS"
+sudo curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo curl -L "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 ## Instalando pacotes .deb baixados na sessão anterior ##
 say "Instalando os Pacotes Debian"
 sudo dpkg -i $DIRETORIO_DOWNLOADS/*.deb
@@ -75,16 +51,6 @@ for nome_do_programa in ${PROGRAMAS_PARA_INSTALAR[@]}; do
   else
     say "[ INSTALANDO VIA APT ] - [ JÁ INSTALADO ] - $nome_do_programa"
   fi
-done
-
-say "ADICIONANDO FLATHUB NO FLATPAK"
-sudo apt install flatpak
-flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-
-# Instalar programas no flatpak
-for nome_do_programa in ${PROGRAMAS_PARA_INSTALAR_FLATPAK[@]}; do
-  sudo flatpak install flathub "$nome_do_programa" -y
-  say "[ INSTALANDO VIA FLATPAK ] - $nome_do_programa"
 done
 
 # ---------------------------------------------------------------------- #
