@@ -12,7 +12,7 @@ ZSH_THEME="spaceship"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
+# a theme from this variable instead of looking in $ZSH/themes/
 # If set to an empty array, this variable will have no effect.
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
@@ -33,7 +33,7 @@ ZSH_THEME="spaceship"
 # export UPDATE_ZSH_DAYS=13
 
 # Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS=true
+# DISABLE_MAGIC_FUNCTIONS="true"
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -64,11 +64,11 @@ ZSH_THEME="spaceship"
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
 # Which plugins would you like to load?
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git asdf)
+plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -114,84 +114,45 @@ autoload -Uz _zinit
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
 zinit light-mode for \
+    zinit-zsh/z-a-rust \
     zinit-zsh/z-a-as-monitor \
     zinit-zsh/z-a-patch-dl \
     zinit-zsh/z-a-bin-gem-node
 
 ### End of Zinit's installer chunk
 
-zplugin light zdharma/fast-syntax-highlighting
-zplugin light zsh-users/zsh-autosuggestions
-zplugin light zsh-users/zsh-completions
+zinit light zsh-users/zsh-autosuggestions
+zinit light zsh-users/zsh-completions
+zinit light zdharma/fast-syntax-highlighting
 
-export PATH=/home/eliogaldino/Android/Sdk/platform-tools:$PATH
-export PATH=/home/eliogaldino/.pub-cache/bin:$PATH
-export ANDROID_HOME=$HOME/Android
-export ANDROID_SDK_ROOT=$HOME/Android/Sdk
-export PATH=$PATH:$HOME/bin:$ANDROID_SDK_ROOT/tools
-export PATH=${PATH}:${ANDROID_SDK_ROOT}/tools
-export PATH=${PATH}:${ANDROID_SDK_ROOT}/platform-tools
-export NO_PROXY=127.0.0.1
+LS_COLORS=$LS_COLORS:'ow=01;34:' ; export LS_COLORS
+ 
+SPACESHIP_PROMPT_ORDER=(
+  user          # Username section
+  dir           # Current directory section
+  host          # Hostname section
+  git           # Git section (git_branch + git_status)
+  hg            # Mercurial section (hg_branch  + hg_status)
+  exec_time     # Execution time
+  line_sep      # Line break
+  vi_mode       # Vi-mode indicator
+  jobs          # Background jobs indicator
+  exit_code     # Exit code section
+  char          # Prompt character
+)
+ 
+SPACESHIP_USER_SHOW="always" # Shows System user name before directory name
+ 
+SPACESHIP_PROMPT_ADD_NEWLINE=false
+# SPACESHIP_PROMPT_SEPARATE_LINE=false # Make the prompt span across two lines
+# SPACESHIP_DIR_TRUNC=1 # Shows only the last directory folder name
 
-SPACESHIP_PROMPT_ADD_NEWLINE=false 
-SPACESHIP_CHAT_SUFFIX=" "
+SPACESHIP_CHAR_SUFFIX=" "
 
-mkdircd ()
+unsetopt PROMPT_SP
+
+mkcd ()
 {
     mkdir -p -- "$1" &&
       cd -P -- "$1"
 }
-
-createComponent()
-{
-    mkdir -p -- "./src/components/$1" &&
-    touch "./src/components/$1/index.js" &&
-    echo "import React from 'react';
-
-    // import { Container } from './styles';
-
-    function $1() {
-      return <div />;
-    }
-
-    export default $1;" > "./src/components/$1/index.js" &&
-    touch "./src/components/$1/styles.js" &&
-    
-    echo "import styled from 'styled-components';
-
-    export const Container = styled.div``;
-    " > "./src/components/$1/styles.js"
-}   
-createPage()
-{
-    mkdir -p -- "./src/pages/$1" &&
-    touch "./src/pages/$1/index.js" &&
-
-    echo "import React from 'react';
-
-    // import { Container } from './styles';
-
-    function $1() {
-      return <div />;
-    }
-
-    export default $1;" > "./src/pages/$1/index.js" &&
-
-    touch "./src/pages/$1/styles.js" &&
-
-    echo "import styled from 'styled-components';
-
-    export const Container = styled.div``;
-    " > "./src/pages/$1/styles.js"
-
-
-}
-
-alias epp="cd ~/Projetos/eliana/eliana_app2"
-alias ebe="cd ~/Projetos/eliana/eliana_backend"
-alias efe="cd ~/Projetos/eliana/qr_code_generator"
-alias ewb="cd ~/Projetos/eliana/eliana_web"
-alias projetos="cd ~/Projetos"
-alias estudos="cd ~/Projetos/estudos"
-alias and="~/development/android-studio/bin/studio.sh &"
-alias pg="cd ~/development/psql && docker-compose up -d"

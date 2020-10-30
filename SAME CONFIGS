@@ -1,9 +1,0 @@
-
-alias c-i="code-insiders"
-alias and="./Development/android-studio/bin/studio.sh"
-alias phone="scrcpy -b 6M"
-alias codetray="./Development/code-tray.sh"
-
-export PATH="$PATH:/home/eliogaldino/.pub-cache/bin"
-export PATH="$PATH:/home/eliogaldino/Development/android-studio/jre/bin"
-export PATH="$PATH:/home/eliogaldino/Development/platform-tools"

@@ -1,21 +1,13 @@
-#!/usr/bin/env bash
+#!/bin/bash
 say() {
     echo -e "\e[1m[ POST INSTALL ] - $@"
 }
-
-cd
-
-# ----------------------------- VARIÁVEIS ----------------------------- #
-URL_4K_VIDEO_DOWNLOADER="https://dl.4kdownload.com/app/4kvideodownloader_4.9.2-1_amd64.deb"
-URL_DOCKER1="https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/containerd.io_1.2.6-3_amd64.deb"
-URL_DOCKER2="https://download.docker.com/linux/ubuntu/dists/bionic/pool/stable/amd64/docker-ce-cli_19.03.8~3-0~ubuntu-bionic_amd64.deb"
-URL_DOCKER3="https://download.docker.com/linux/ubuntu/dists/bionic/pool/stable/amd64/docker-ce_19.03.8~3-0~ubuntu-bionic_amd64.deb"
+## DOWNLOADS
+URL_CHROME="chrome link"
 
 DIRETORIO_DOWNLOADS="$HOME/Downloads/programas"
 
 PROGRAMAS_PARA_INSTALAR=(
-  git
-  fonts-hack-ttf
   fonts-firacode
   zsh
 )
@@ -47,26 +39,31 @@ sudo apt update -y
 ## Atualizando o repositório depois da adição de novos repositórios ##
 
 ## Download e instalaçao de programas externos ##
-mkdir   "$DIRETORIO_DOWNLOADS"
+mkdir"$DIRETORIO_DOWNLOADS"
 
-say "Baixando 4K Video Downloader"
-wget -c "$URL_4K_VIDEO_DOWNLOADER" -P "$DIRETORIO_DOWNLOADS"
-
-say "Baixando DOCKER"
-wget -c "$URL_DOCKER1"             -P "$DIRETORIO_DOWNLOADS"
-wget -c "$URL_DOCKER2"             -P "$DIRETORIO_DOWNLOADS"
-wget -c "$URL_DOCKER3"             -P "$DIRETORIO_DOWNLOADS"
+wget -c "$URL_CHROME"             -P "$DIRETORIO_DOWNLOADS"
 
 
 ## Instalando pacotes .deb baixados na sessão anterior ##
 say "Instalando os Pacotes Debian"
 sudo dpkg -i $DIRETORIO_DOWNLOADS/*.deb
 
+
+
 say "Fix Broken Install"
 sudo apt --fix-broken install
 # Instalar programas no apt
 
 sudo apt --fix-broken install
+
+## Configurar arquivos de scripts
+chmod 700 ./scripts/docker.sh
+
+## Rodando Scripts
+say "Install Docker"
+./scripts/docker.sh /dev/null 2>&1
+
+
 
 for nome_do_programa in ${PROGRAMAS_PARA_INSTALAR[@]}; do
   if ! dpkg -l | grep -q $nome_do_programa; then # Só instala se já não estiver instalado
