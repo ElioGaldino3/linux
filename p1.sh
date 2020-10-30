@@ -58,10 +58,13 @@ sudo apt --fix-broken install
 
 ## Configurar arquivos de scripts
 chmod 700 ./scripts/docker.sh
+chmod 700 ./scripts/android_studio.sh
 
 ## Rodando Scripts
 say "Install Docker"
 ./scripts/docker.sh /dev/null 2>&1
+say "Configurando Android Studio"
+./scripts/android_studio.sh /dev/null 2>&1
 
 
 
