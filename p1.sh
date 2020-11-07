@@ -98,5 +98,9 @@ sudo apt update && sudo apt dist-upgrade -y
 flatpak update -y
 sudo apt autoclean -y
 sudo apt autoremove -y
-# ----------------------------- CONFIGURAR O ZSH ----------------------------- #
+# ----------------------------- AJEITAR ADB PRO SCRCPY ----------------------------- #
 
+adb kill-server
+sudo cp ~/Android/Sdk/platform-tools/adb /usr/bin/adb
+sudo chmod +x /usr/bin/adb
+adb start-server
