@@ -5,6 +5,8 @@ DIRETORIO_DOWNLOADS="$HOME/Downloads/programas"
 mkdir ~/Projetos
 mkdir ~/.development
 
+sudo apk install -f
+
 ## DOWNLOADS
 URL_CHROME="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
 URL_HYPER="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
