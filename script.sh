@@ -20,6 +20,14 @@ PROGRAMAS_PARA_INSTALAR=(
   zsh
   scrcpy
   flatpak
+  qemu
+  qemu-kvm
+  libvirt-daemon
+  bridge-utils
+  virt-manager
+  virtinst
+  libvirt-daemon-system
+  libvirt-clients
 )
 
 PROGRAMAS_PARA_INSTALAR_FLATPAK=(
@@ -81,6 +89,8 @@ sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io
 sudo groupadd docker
 sudo usermod -aG docker $USER
+sudo adduser `id -un` libvirt
+sudo adduser `id -un` kvm
 
 update-alternatives --install /usr/bin/editor editor /usr/bin/code 0
 sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /opt/Hyper/hyper 50
