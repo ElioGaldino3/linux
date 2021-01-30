@@ -5,9 +5,6 @@ DIRETORIO_DOWNLOADS="$HOME/Downloads/programas"
 mkdir ~/Projetos
 mkdir ~/.development
 
-unzip ~/Downloads/*.tar.gz -d /home/eliogaldino/.development
-unzip ~/Downloads/*.tar.xz -d /home/eliogaldino/.development
-
 ## DOWNLOADS
 URL_CHROME="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
 URL_HYPER="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
