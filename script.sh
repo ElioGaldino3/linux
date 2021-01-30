@@ -2,6 +2,21 @@
 
 DIRETORIO_DOWNLOADS="$HOME/Downloads/programas"
 
+function await_lock() { 
+  while fuser /var/lib/dpkg/lock >/dev/null 2>&1 ; do
+    case $(($i % 4)) in
+        0 ) j="-" ;;
+        1 ) j="\\" ;;
+        2 ) j="|" ;;
+        3 ) j="/" ;;
+    esac
+    tput rc
+    echo -en "\r[$j] Aguardando liberar para instalação dos aplicativos" 
+    sleep 0.5
+    ((i=i+1))
+  done
+}
+
 mkdir ~/Projetos
 mkdir ~/.development
 
@@ -37,26 +52,26 @@ PROGRAMAS_PARA_INSTALAR_FLATPAK=(
   com.getpostman.Postman
 )
 
-## Removendo travas eventuais do apt ##
-sudo rm /var/lib/dpkg/lock-frontend
-sudo rm /var/cache/apt/archives/lock
-
 ## Atualizando o repositório ##
 say "Atualizando Repositório"
 sudo apt update -y
 
 ## Download e instalaçao de programas externos ##
-mkdir"$DIRETORIO_DOWNLOADS"
+mkdir "$DIRETORIO_DOWNLOADS"
 
 wget -c "$URL_CHROME"             -P "$DIRETORIO_DOWNLOADS"
 wget -c "$URL_DISCORD"             -P "$DIRETORIO_DOWNLOADS"
 wget -c "$URL_HYPER"             -P "$DIRETORIO_DOWNLOADS"
 wget -c "$URL_CODE"             -P "$DIRETORIO_DOWNLOADS"
 
+await_lock
+
 sudo dpkg -i $DIRETORIO_DOWNLOADS/*.deb
 
 sudo apt --fix-broken install
 sudo apt --fix-broken install
+
+await_lock
 
 for nome_do_programa in ${PROGRAMAS_PARA_INSTALAR[@]}; do
   if ! dpkg -l | grep -q $nome_do_programa; then # Só instala se já não estiver instalado
@@ -69,15 +84,21 @@ done
 
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
+await_lock
+
 for nome_do_programa in ${PROGRAMAS_PARA_INSTALAR_FLATPAK[@]}; do
   sudo flatpak install flathub "$nome_do_programa" -y
   say "[ INSTALANDO VIA FLATPAK ] - $nome_do_programa"
 done
 
+await_lock
+
 sudo apt update && sudo apt dist-upgrade -y
 flatpak update -y
 sudo apt autoclean -y
 sudo apt autoremove -y
+
+await_lock
 
 sudo apt-get remove docker docker-engine docker.io containerd runc -y
 sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y
