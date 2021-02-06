@@ -24,7 +24,6 @@ sudo apk install -f
 
 ## DOWNLOADS
 URL_CHROME="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-URL_HYPER="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
 URL_CODE="https://az764295.vo.msecnd.net/stable/ea3859d4ba2f3e577a159bc91e3074c5d85c0523/code_1.52.1-1608136922_amd64.deb"
 URL_DISCORD="https://dl.discordapp.net/apps/linux/0.0.13/discord-0.0.13.deb"
 
@@ -61,7 +60,6 @@ mkdir "$DIRETORIO_DOWNLOADS"
 
 wget -c "$URL_CHROME"             -P "$DIRETORIO_DOWNLOADS"
 wget -c "$URL_DISCORD"             -P "$DIRETORIO_DOWNLOADS"
-wget -c "$URL_HYPER"             -P "$DIRETORIO_DOWNLOADS"
 wget -c "$URL_CODE"             -P "$DIRETORIO_DOWNLOADS"
 
 await_lock
@@ -70,6 +68,10 @@ sudo dpkg -i $DIRETORIO_DOWNLOADS/*.deb
 
 sudo apt --fix-broken install
 sudo apt --fix-broken install
+
+await_lock
+
+sudo apt install -f -y
 
 await_lock
 
@@ -98,6 +100,8 @@ flatpak update -y
 sudo apt autoclean -y
 sudo apt autoremove -y
 
+sudo apt install -f -y
+
 await_lock
 
 sudo apt-get remove docker docker-engine docker.io containerd runc -y
@@ -112,9 +116,6 @@ sudo usermod -aG docker $USER
 sudo adduser `id -un` libvirt
 sudo adduser `id -un` kvm
 
-update-alternatives --install /usr/bin/editor editor /usr/bin/code 0
-sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /opt/Hyper/hyper 50
-
 chsh -s $(which zsh)
 
 sudo iptables -I INPUT -p tcp --dport 4565 -j ACCEPT
@@ -125,4 +126,4 @@ sudo iptables -I INPUT -p tcp --dport 8082 -j ACCEPT
 sudo iptables -I INPUT -p tcp --dport 8083 -j ACCEPT
 sudo iptables -I INPUT -p tcp --dport 80 -j ACCEPT
 sudo iptables -I INPUT -p tcp --dport 3333 -j ACCEPT
-sudo iptables -I INPUT -p tcp --dport 3000 -j sACCEPT
+sudo iptables -I INPUT -p tcp --dport 3000 -j ACCEPT
