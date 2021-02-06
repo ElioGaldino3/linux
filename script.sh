@@ -33,6 +33,7 @@ PROGRAMAS_PARA_INSTALAR=(
   zsh
   scrcpy
   flatpak
+  flameshot
   qemu
   qemu-kvm
   libvirt-daemon
